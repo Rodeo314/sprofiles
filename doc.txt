@@ -1,0 +1,226 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////// IF WORDWRAP IS ENABLED, MAKE SURE NOTEPAD IS AT LEAST THIS WIDE FOR OPTIMUM VIEWING //////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+This document describes the format and usage of each section of a SimBrief aircraft profile.
+The "C172_Sample.txt" file can be used as a starting point.
+
+An aircraft profile is divided into sections, with each section containing various pieces of
+data. Below is a breakdown of each section along with definitions for each data point:
+
+
+////// GENERAL SECTIONS //////
+
+[Aircraft]
+ICAO          = The ICAO code for this aircraft.
+Name          = The name for this aircraft, please keep it less than 12 characters long.
+Engines       = The engine type for this aircraft profile.
+Fin           = The default fin number.
+Reg           = The default registration.
+Index         = The default index, only used on some flightplans. Use "....." if no index specified.
+Pax           = The maximum certified passenger count.
+Equip         = The default ICAO equipment string.
+PBN           = The default ICAO PBN string. Always start this with "PBN/...". If no PBN for this aircraft, type "NOPBN".
+FA            = The standard number of Flight Attendants carried.
+CAT           = Not used, just enter "1 / A".
+CInom         = The default cost index for this aircraft. Not used for small aircraft so just enter 20 or something.
+Comments      = Any comments about this profile you would like to make.
+
+[Weights]
+OEW           = Operating Empty Weight, in THOUSANDS OF POUNDS.
+Cargo         = Cargo hold maximum capacity weight, in THOUSANDS OF POUNDS. 
+MZFW          = Max Zero Fuel Weight, in THOUSANDS OF POUNDS.
+MTOW          = Max Takeoff Weight, in THOUSANDS OF POUNDS.
+MLW           = Max Landing Weight, in THOUSANDS OF POUNDS.
+Fuel          = Max Fuel Weight, in THOUSANDS OF POUNDS.
+
+[Speeds]
+CruiseMach    = Standard cruising mach speed. Used only in very general preliminary calculations.
+CruiseIAS     = Standard cruising IAS speed, used if cruise altitude is too low for the above mach number.
+
+[Fuel]
+NominalBurn   = The average fuel flow for this aircraft, in THOUSANDS OF POUNDS PER HOUR. This gives a very general idea of the fuel burn for preliminary calculations.
+AltCurve      = Factor used to curve the average fuel flow, use "0.1" if you are unsure.
+WgtCurve      = Factor used to curve the average fuel flow, use "0.5" if you are unsure.
+TaxiBurn      = The amount of fuel burned per 10 minutes of taxi, in THOUSANDS OF POUNDS.
+
+[Altitude]
+Ceiling       = The maximum certified ceiling for this aircraft, in HUNDREDS OF FEET (i.e. Flight Levels)
+AltMTOW       = The optimum cruising altitude when the aircraft is at MTOW, in HUNDREDS OF FEET (i.e. Flight Levels)
+AltOEW        = The optimum cruising altitude when the aircraft is at OEW, in HUNDREDS OF FEET (i.e. Flight Levels). This can be higher than the Max Certified
+                Ceiling if required to shift the graph. For example, if the aircraft is able to reach it's max certified ceiling at a weight which is midway
+                through the OEW and the MTOW, you will need to make the AltOEW value higher than the certified ceiling. Think of these 2 altitude values as 2
+                points on a linear graph, by defining the values of these 2 points you can control the slope and definition of the altitude capability graph.
+                SimBrief will never plan your aircraft at an altitude which is higher than the "Ceiling" value above, the AltMTOW and AltOEW values are merely
+                used to interpolate the actual optimum altitude at a given weight.
+
+                For small aircraft like the C172, this is better used to simply define a standard cruising altitude at these weights. Even though the C172
+                could technically climb to 10000ft, it's very rare for a pilot to actually do that.
+
+InhibitOpt    = Inhibits SimBrief's optimum altitude selection (i.e. wind optimization). This works very poorly for low-level aircraft like the C172, so set it to "true".
+
+[Profiles]
+StdClimb      = The default climb chart used, must match the name of one of the Climb Profiles defined below.
+StdCruise     = The default cruise chart used, must match the name of one of the Cruise Charts below. If you have defined Cost Index data, type "CIAUTO" here.
+StdAnalysis   = The default chart used during preliminary calculations. For big jets this is usually "LRC", but for small aircraft like the C172 just try to choose the most common Cruise Profile.
+StdDescent    = The default descent chart used, must match the name of one of the Descent Profiles defined below.
+StdReserve    = The default Reserve (also known as Hold) chart used, must match the name of one of the Profiles defined below (normally named RES).
+StdAlternate  = The default Alternate Cruise schedule, used when proceeding to an alternate.
+
+
+////// CHART SECTIONS //////
+
+[Climb.NORMAL]
+Profile       = NORMAL
+ISA/10        = 1.1
+Units         = KGS
+Chart         = {CLB>>>
+	740		1111
+1000	01.0/0001/002	01.0/0001/002
+2000	02.0/0002/004	03.0/0002/004
+4000	05.0/0003/008	06.0/0004/008
+6000	09.0/0005/014	10.0/0006/014
+8000	14.0/0007/021	15.0/0008/021
+10000	21.0/0010/029	22.0/0011/029
+12000	30.0/0014/043	31.0/0015/043
+>>>}
+
+------------------------------------------------------------------------------------
+
+The above is a Climb Profile section. You must have at least 1 of these, but can have more than 1 if you wish. Each Climb section must have a unique name which defines it's climb speeds. In this case, I've named it NORMAL.
+
+"ISA/10" is the influence of the ISA temperature on the climb data, per 10 degrees of ISA, expressed as a factor. So in this case, "1.1" means that for every 10 degrees above ISA, the climb distance, time, and fuel will increase by a factor of 1.1 (10 percent). 10 degrees below ISA will have the opposite effect (decrease by 10%).
+
+"Units" defines the units for the weights in this chart, can be either "KGS" or "LBS".
+
+"Chart" is the actual climb chart, formatted in text form. It begins with a special series of characters to signify the beginning of the chart, in this case "{CLB>>>". Each chart must use a unique name in this character string, since there is only 1 climb chart in this profile we can name this chart "CLB" without any problems. If you wanted to add another climb chart, you would have to name it something else ("CLB2" would work fine). 
+
+After this series of characters, the chart can begin. The first line lists the weights for each column. Subsequent lines, or rows, list the data for various altitudes. Each row must begin with it's associated altitude, in this example the second row starts with "2000" (i.e. 2000ft). This row will therefore contain the time/fuel/distance to climb to 2000ft after takeoff. Following the altitude entry, data-points are entered for each weight value listed in the first row. In this case, the first data-point is "02.0/0002/004", which indicates the time (in minutes), followed by the fuel (in KGS or LBS, depending on the chart units), followed by the distance (in nautical miles) to reach 2000ft at a weight of 740kg, each separated by a slash "/". For more precision, you can use decimal numbers (i.e. 1.2 minutes, 3.4 nautical miles, etc). You may have as many or as few altitude/weight values as you wish, SimBrief will interpolate between values as required.
+
+The chart datapoints must be separated by tabs, not spaces. You may separate fields by more than 1 tab as required to make the chart more readable.
+
+Finally, when the chart is complete, signify this by typing the following characters on a new line: ">>>}".
+
+
+[Cruise.2200RPM]
+ISA/10        = 0.95
+ISASPD/10     = 0.98
+Units         = KGS
+Chart         = {2200RPM>>>
+	740		1111
+2000	23.2/0.170	23.2/0.170
+4000	22.1/0.170	22.1/0.170
+6000	21.0/0.171	21.0/0.171
+8000	19.9/0.171	19.9/0.171
+10000	19.1/0.169	19.1/0.169
+12000	18.5/0.166	18.5/0.166
+>>>}
+
+------------------------------------------------------------------------------------
+
+This is a cruise chart defining the cruise profile at 2200RPM. Like climb sections, each cruise section must have a unique name.
+
+"ISA/10" defines how the fuel flow figure is influenced per 10 degrees above and below ISA. In this case, "0.95" means that for each 10 degrees above ISA, the fuel flow will decrease by 5%. 10 degrees below ISA will have the opposite effect. 
+
+"ISASPD/10" defines how the cruise speed is influenced per 10 degrees above ISA. A value of "1.03" would indicate that the Mach number increases by 3% for every 10 degrees above ISA, while "0.97" would indicate a decrease of 3%. If this entry is omitted, a value of "1.00" will be assumed (i.e. ISA deviation will have no effect on Mach speed).
+
+"Units" defines the units for the weights and fuel flows in this chart, can be either "KGS" or "LBS".
+
+"Chart" is the actual cruise chart. This works exactly like the climb chart, "{2200RPM>>>" signifies the start of the chart and ">>>}" signifies the end. Each cruise chart must have a unique name. The first row lists the various weights, and each subsequent row lists various altitudes. The individual data points list the Fuel Flow Per Hour (in LBS or KGS depending on the "Units" value) followed by the Mach Airspeed, separated by a slash "/". Use tabs to separate data points, multiple tabs in a row may be used.
+
+
+
+[Cruise.RES]
+ISA/10        = 0.95
+Units         = KGS
+ConstantIAS   = 80
+Chart         = {RES>>>
+	740	1111
+2000	23.2	23.2
+4000	22.1	22.1
+6000	21.0	21.0
+8000	19.9	19.9
+10000	19.1	19.1
+12000	18.5	18.5
+>>>}
+
+------------------------------------------------------------------------------------
+
+This cruise chart defines the Reserve cruise schedule, also known by some manufacturers as the "Hold" chart. It is only used to calculate the Reserve fuel requirements by SimBrief. 
+
+"ConstantIAS" indicates the IAS speed this chart is flown at. It doesn't matter too much, but try to use a reasonable value.
+
+"Chart" is similar to the other cruise chart above, except each data point only contains a Fuel Flow Per Hour, since the speed was defined via the "ConstantIAS" option.
+
+
+[Descent.NORMAL]
+Profile       = NORMAL
+ISA/10        = 1.04
+Units         = KGS
+Chart         = {DES>>>
+	740		1111
+1000	01.0/0001/002	01.0/0001/002
+2000	03.0/0003/006	03.0/0003/006
+4000	05.0/0005/010	05.0/0005/010
+6000	08.0/0008/016	08.0/0008/016
+8000	10.0/0010/020	10.0/0010/020
+10000	13.0/0013/026	13.0/0013/026
+12000	18.0/0018/036	18.0/0018/036
+>>>}
+
+------------------------------------------------------------------------------------
+
+This is a descent chart. Usage is very similar to the "Climb" chart described above; each data point contains the time (minutes), fuel (KGS or LBS), and distance (NM) required for descent from the altitude defined at the start of the row to sea level, separated by slashes "/". 
+
+
+////// TLR SECTION //////
+
+The "[TLR]" section defines very basic Takeoff and Landing data for this aircraft. Not all of these options are required, they are described below:
+
+[TLR]
+TakeOffFlap   = The takeoff flap setting used for the V1,VR,V2,Vmcg and Vmca values.
+V1max         = The V1 value at the Maximum Takeoff Weight, expressed WITHOUT the first digit if over 100. I.E. a max V1 of 153 is expressed simply as "53".
+VRmax         = The VR value at the Maximum Takeoff Weight, expressed WITHOUT the first digit if over 100. I.E. a max VR of 155 is expressed simply as "55".
+V2max         = The V2 value at the Maximum Takeoff Weight, expressed WITHOUT the first digit if over 100. I.E. a max V2 of 157 is expressed simply as "57".
+V1min         = The V1 value at the Operating Empty Weight, expressed WITHOUT the first digit if over 100. I.E. a min V1 of 98 is still expressed as "98".
+VRmin         = The VR value at the Operating Empty Weight, expressed WITHOUT the first digit if over 100. I.E. a min VR of 103 is expressed simply as "03".
+V2min         = The V2 value at the Operating Empty Weight, expressed WITHOUT the first digit if over 100. I.E. a min V2 of 109 is expressed simply as "09".
+Vmcg          = The Vmcg (Minimum Control Ground Speed) for this aircraft. Use "000" if there is none.
+Vmca          = The Vmca (Minimum Control Air Speed) for this aircraft. Use "000" if there is none.
+LandingFlap   = The preferred landing flap setting.
+LandingFlap2  = The second landing flap setting.
+FLP1/FLP2     = The ratio of landing distance for the preferred landing flap versus the second landing flap. In this case, the second landing flap takes 1.095 times the distance of the preferred landing flap.
+VrefF1max     = The Vref for the preferred landing flap at MTOW. 
+VrefF1min     = The Vref for the preferred landing flap at OEW. 
+VrefF2max     = The Vref for the second landing flap at MTOW. 
+VrefF2min     = The Vref for the second landing flap at OEW. 
+TakeOffRoll   = The Takeoff Roll distance for a takeoff at the "TakeOffFlap" at MTOW.
+LandingRoll   = The Landing Roll distance for a landing at the preferred landing flap.
+
+----------------------------------------------
+
+I don't recommend making a TLR section for small aircraft as it probably won't work well. Simply use the following TLR section as a substitute.
+
+(If you really want to, you could input the TakeOffRoll and/or LandingRoll only and leave the rest of the chart blank as follows)
+
+[TLR]
+TakeOffFlap   = 
+V1max         = 
+VRmax         = 
+V2max         = 
+V1min         = 
+VRmin         = 
+V2min         = 
+Vmcg          = 0
+Vmca          = 
+LandingFlap   = 
+LandingFlap2  = 
+FLP1/FLP2     = 1
+VrefF1max     = 
+VrefF1min     = 
+VrefF2max     = 
+VrefF2min     = 
+TakeOffRoll   = 
+LandingRoll   =
