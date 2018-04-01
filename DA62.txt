@@ -1,13 +1,13 @@
 [Aircraft]
-ICAO          = C172
-Name          = CESSNA 172R
-Engines       = IO-360-L2A
-Fin           = 172
-Reg           = N172SB
+ICAO          = DA62
+Name          = DIAMOND DA62
+Engines       = AE-330
+Fin           = 062
+Reg           = N062SB
 Index         = .....
-Pax           = 3
-Equip         = L-SFG/C
-PBN           = NOPBN
+Pax           = 6
+Equip         = L-SDGRWY/L
+PBN           = PBN/D2
 PER           = A
 FA            = 0
 CAT           = 1 / A
@@ -23,8 +23,8 @@ MLW           = 2.45
 Fuel          = 0.336
 
 [Speeds]
-CruiseMach    = 0.18
-CruiseIAS     = 105
+CruiseMach    = 0.28
+CruiseIAS     = 162
 
 [Fuel]
 NominalBurn   = 0.045
