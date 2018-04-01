@@ -1,0 +1,181 @@
+[Aircraft]
+ICAO          = C172
+Name          = CESSNA 172R
+Engines       = IO-360-L2A
+Fin           = 172
+Reg           = N172SB
+Index         = .....
+Pax           = 3
+Equip         = L-SFG/C
+PBN           = NOPBN
+PER           = A
+FA            = 0
+CAT           = 1 / A
+CInom         = 5
+Comments      = None
+
+[Weights]
+OEW           = 1.631
+Cargo         = 0.17
+MZFW          = 2.45
+MTOW          = 2.45
+MLW           = 2.45
+Fuel          = 0.336
+
+[Speeds]
+CruiseMach    = 0.18
+CruiseIAS     = 105
+
+[Fuel]
+NominalBurn   = 0.045
+AltCurve      = 0.16
+WgtCurve      = 0.3
+TaxiBurn      = 0.0066
+
+[Altitude]
+Ceiling       = 120
+AltMTOW       = 040
+AltOEW        = 060
+InhibitOpt    = true
+
+[Profiles]
+StdClimb      = NORMAL
+StdCruise     = 2200RPM
+StdAnalysis   = 2350RPM
+StdDescent    = N0RMAL
+StdReserve    = RES
+StdAlternate  = 2200RPM
+
+[Climb.NORMAL]
+Profile       = NORMAL
+ISA/10        = 1.1
+Units         = KGS
+Chart         = {CLB>>>
+	740		1111
+1000	01.0/0001/002	01.0/0001/002
+2000	02.0/0002/004	03.0/0002/004
+4000	05.0/0003/008	06.0/0004/008
+6000	09.0/0005/014	10.0/0006/014
+8000	14.0/0007/021	15.0/0008/021
+10000	21.0/0010/029	22.0/0011/029
+12000	30.0/0014/043	31.0/0015/043
+>>>}
+
+[Cruise.2200RPM]
+ISA/10        = 0.95
+ISASPD/10     = 0.98
+Units         = KGS
+Chart         = {2200RPM>>>
+	740		1111
+2000	23.2/0.170	23.2/0.170
+4000	22.1/0.170	22.1/0.170
+6000	21.0/0.171	21.0/0.171
+8000	19.9/0.171	19.9/0.171
+10000	19.1/0.169	19.1/0.169
+12000	18.5/0.166	18.5/0.166
+>>>}
+
+[Cruise.2000RPM]
+ISA/10        = 0.95
+ISASPD/10     = 0.98
+Units         = KGS
+Chart         = {2000RPM>>>
+	740		1111
+2000	18.0/0.151	18.0/0.151
+4000	17.4/0.150	17.4/0.150
+6000	16.9/0.148	16.9/0.148
+8000	16.3/0.146	16.3/0.146
+10000	16.1/0.143	16.1/0.143
+>>>}
+
+[Cruise.2100RPM]
+ISA/10        = 0.95
+ISASPD/10     = 0.98
+Units         = KGS
+Chart         = {2100RPM>>>
+	740		1111
+2000	20.4/0.161	20.4/0.161
+4000	19.3/0.161	19.3/0.161
+6000	18.8/0.161	18.8/0.161
+8000	18.0/0.159	18.0/0.159
+10000	17.4/0.157	17.4/0.157
+12000	16.9/0.153	16.9/0.153
+>>>}
+
+[Cruise.2300RPM]
+ChartMin      = 4000
+ChartBelowMin = 2200RPM
+ISA/10        = 0.95
+ISASPD/10     = 0.98
+Units         = KGS
+Chart         = {2300RPM>>>
+	740		1111
+4000	24.8/0.179	24.8/0.179
+6000	23.4/0.181	23.4/0.181
+8000	22.3/0.180	22.3/0.180
+10000	21.2/0.180	21.2/0.180
+12000	20.4/0.178	20.4/0.178
+>>>}
+
+[Cruise.2350RPM]
+ChartMin      = 6000
+ChartBelowMin = 2200RPM
+ISA/10        = 0.95
+ISASPD/10     = 0.98
+Units         = KGS
+Chart         = {2350RPM>>>
+	740		1111
+6000	25.1/0.185	25.1/0.185
+8000	23.7/0.185	23.7/0.185
+10000	22.3/0.185	22.3/0.185
+12000	21.5/0.185	21.5/0.185
+>>>}
+
+[Cruise.RES]
+ISA/10        = 0.95
+Units         = KGS
+ConstantIAS   = 80
+Chart         = {RES>>>
+	740	1111
+2000	23.2	23.2
+4000	22.1	22.1
+6000	21.0	21.0
+8000	19.9	19.9
+10000	19.1	19.1
+12000	18.5	18.5
+>>>}
+
+[Descent.NORMAL]
+Profile       = NORMAL
+ISA/10        = 1.04
+Units         = KGS
+Chart         = {DES>>>
+	740		1111
+1000	01.0/0001/002	01.0/0001/002
+2000	03.0/0003/006	03.0/0003/006
+4000	05.0/0005/010	05.0/0005/010
+6000	08.0/0008/016	08.0/0008/016
+8000	10.0/0010/020	10.0/0010/020
+10000	13.0/0013/026	13.0/0013/026
+12000	18.0/0018/036	18.0/0018/036
+>>>}
+
+[TLR]
+TakeOffFlap   = 
+V1max         = 
+VRmax         = 
+V2max         = 
+V1min         = 
+VRmin         = 
+V2min         = 
+Vmcg          = 0
+Vmca          = 
+LandingFlap   = 
+LandingFlap2  = 
+FLP1/FLP2     = 1
+VrefF1max     = 
+VrefF1min     = 
+VrefF2max     = 
+VrefF2min     = 
+TakeOffRoll   = 1600
+LandingRoll   =
